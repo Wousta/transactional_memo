@@ -1,9 +1,4 @@
-//
-// Created by luis on 12/2/24.
-//
-
 #include "VersionSpinLock.h"
-
 
 bool versionSpinLock_init(VersionSpinLock* lock) {
     lock->lock_state.store(0);

@@ -109,6 +109,15 @@ bool tm_end(shared_t shared, tx_t tx) noexcept {
         return true;
     }
 
+    // Upper bound of concurrent accesses to locks to avoid starvation
+    if(region->current_txs.load() > MAX_SIMUL_TXS) {
+        delete transaction;
+        return false;
+    }
+
+    // Increment the number of transactions
+    region->current_txs.fetch_add(1);
+
     // Try to aquire all locks in the write-set, if any lock is already taken, abort the transaction
     Node *node = transaction->writeList->getHead();
     while(node) {
@@ -122,6 +131,7 @@ bool tm_end(shared_t shared, tx_t tx) noexcept {
                 locked_node = locked_node->next;
             }
 
+            region->current_txs.fetch_sub(1);
             delete transaction;
             return false;
         }
@@ -149,6 +159,7 @@ bool tm_end(shared_t shared, tx_t tx) noexcept {
                     locked_node = locked_node->next;
                 }
 
+                region->current_txs.fetch_sub(1);
                 delete transaction;
                 return false;
             }
@@ -163,6 +174,7 @@ bool tm_end(shared_t shared, tx_t tx) noexcept {
     // write-lock bit
     transaction_commit_and_release_locks(transaction, region->getSpinLocks(), region->align);
 
+    region->current_txs.fetch_sub(1);
     delete transaction;
     return true;
 }

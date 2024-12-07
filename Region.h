@@ -1,7 +1,3 @@
-//
-// Created by luis on 12/3/24.
-//
-
 #ifndef CS453_2024_PROJECT_MASTER_REGION_H
 #define CS453_2024_PROJECT_MASTER_REGION_H
 
@@ -31,55 +27,25 @@ class Region {
     public:
         const size_t size;
         const size_t align;
+        std::atomic_uint current_txs = 0;
 
 
         Region(size_t size, size_t align);
 
         ~Region();
 
-        void* getStart() {
-            return start;
-        }
+        void* getStart() { return start; }
+        segment_list getAllocs() { return allocs; }
+        void setAllocs(segment_list allocs) { this->allocs = allocs; }
+        void unlockSegmentList() { segmentListMutex.unlock(); }
+        void lockSegmentList() { segmentListMutex.lock(); }
+        int getClockVersion() { return clock.load(); }
+        int incrementClockVersion() { return clock.fetch_add(1) + 1; }
 
-        segment_list getAllocs() {
-            return allocs;
-        }
-
-        void setAllocs(segment_list allocs) {
-            this->allocs = allocs;
-        }
-
-        void unlockSegmentList() {
-            segmentListMutex.unlock();
-        }
-
-        void lockSegmentList() {
-            segmentListMutex.lock();
-        }
-
-        VersionSpinLock* getSpinLocks() {
-            return locks;
-        }
-
-        int getSpinLockState(int index) {
-            return versionSpinLock_get_state(&locks[index]);
-        }
-
-        bool acquireSpinLock(int index) {
-            return versionSpinLock_acquire(&locks[index]);
-        }
-
-        void releaseSpinLock(int index) {
-            versionSpinLock_release(&locks[index]);
-        }
-
-        int getClockVersion() {
-            return clock.load();
-        }
-
-        int incrementClockVersion() {
-            return clock.fetch_add(1) + 1;
-        }
+        VersionSpinLock* getSpinLocks() { return locks; }
+        int getSpinLockState(int index) { return versionSpinLock_get_state(&locks[index]); }
+        bool acquireSpinLock(int index) { return versionSpinLock_acquire(&locks[index]); }
+        void releaseSpinLock(int index) { versionSpinLock_release(&locks[index]); }
 };
 
 

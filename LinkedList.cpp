@@ -1,7 +1,3 @@
-//
-// Created by luis on 12/3/24.
-//
-
 #include "LinkedList.h"
 
 LinkedList::LinkedList() {
@@ -19,9 +15,8 @@ LinkedList::~LinkedList() {
 }
 
 /**
- * @brief Add a node to the list
- * @param node Node to add
- * @return Whether the node was added
+ * @brief Add a node to the linked list
+ * @param node Node to add to the tail of the list
  */
 void LinkedList::add(Node *node) {
     if(!head) {
@@ -42,9 +37,6 @@ void LinkedList::add(Node *node) {
 Node *LinkedList::get(void *address) {
     Node *node = head;
     while(node) {
-        if(node->address > address) {
-            return nullptr;
-        }
 
         if(node->address == address) {
             return node;

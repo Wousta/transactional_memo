@@ -1,7 +1,3 @@
-//
-// Created by luis on 12/3/24.
-//
-
 #include "Transaction.h"
 #include "macros.h"
 #include "glob_constants.h"

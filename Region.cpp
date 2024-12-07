@@ -1,7 +1,3 @@
-//
-// Created by luis on 12/3/24.
-//
-
 #include "Region.h"
 #include "glob_constants.h"
 #include "VersionSpinLock.h"

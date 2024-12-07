@@ -1,7 +1,3 @@
-//
-// Created by luis on 12/3/24.
-//
-
 #ifndef CS453_2024_PROJECT_MASTER_LINKEDLIST_H
 #define CS453_2024_PROJECT_MASTER_LINKEDLIST_H
 
@@ -40,13 +36,8 @@ class LinkedList {
         LinkedList();
         ~LinkedList();
 
-        Node *getHead() {
-            return head;
-        }
-
-        Node *getTail() {
-            return tail;
-        }
+        Node *getHead() { return head; }
+        Node *getTail() { return tail; }
 
         void add(Node *node);
         // No remove, not necessary in this implementation
