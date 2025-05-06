@@ -1,0 +1,3 @@
+# Ignore C++ object files
+*.o
+*.obj
